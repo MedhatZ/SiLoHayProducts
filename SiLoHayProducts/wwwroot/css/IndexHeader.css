@@ -1,0 +1,116 @@
+﻿header {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    background-color: #FFFFFF;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000; /* Lower than mobile slide page (9999) but higher than modal (10000) */
+    gap: 20px; /* Equal spacing between all elements */
+    border-bottom: 1px solid silver;
+}
+
+/* Add padding to body to account for fixed header */
+body {
+    padding-top: 80px;
+}
+
+header > * {
+    height: 100px;
+}
+
+#divmiddle {
+    flex-grow: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    #divmiddle img {
+        max-width: 100%;
+        height: auto;
+    }
+
+#divlogo {
+    width: auto;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+#middleimg {
+    max-height: 70px;
+    content: url("/images/esmerandonos.png");
+}
+
+#emailimg {
+    max-height: 30px;
+    content: url("/images/email.png");
+}
+
+#logoimg {
+    max-width: 220px;
+    height: auto;
+/*    content: url("/images/logo.png");*/
+}
+
+#divemail {
+    display: flex;
+    align-items: center;
+    padding-right: 20px;
+}
+
+    #divemail img {
+        height: 70px;
+        width: auto;
+    }
+
+@media only screen and (max-width: 768px) {
+    /* Adjust body padding for mobile header */
+    body {
+        padding-top: 80px;
+    }
+
+    header {
+        gap: 10px; /* Smaller gap on mobile */
+    }
+
+        header > * {
+            height: 80px; /* Increased height to accommodate banner */
+            min-height: 80px;
+        }
+
+    #divlogo {
+        width: auto; /* Auto width on mobile */
+        padding-left: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    #logoimg {
+        max-width: 120px; /* Smaller logo image */
+    }
+
+    #middleimg {
+        max-height: 60px; /* Increased height to show full banner */
+    }
+
+    #emailimg {
+        max-height: 20px; /* Smaller email icon */
+    }
+
+    #divemail {
+        padding-right: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+        #divemail img {
+            height: 50px; /* Smaller email container */
+            width: auto;
+        }
+}

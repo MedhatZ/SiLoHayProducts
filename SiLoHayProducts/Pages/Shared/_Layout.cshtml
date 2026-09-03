@@ -1,0 +1,249 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SiLoHay.com - Siempre echando pa'lante</title>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/SiLoHay.ico" />
+
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+    <!-- jQuery Validation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    <!-- jQuery Unobtrusive -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <!-- HEADER CUSTOM CSS -->
+    <link rel="stylesheet" href="~/css/IndexHeader.css" />
+    <style>
+        /* ----------------------- */
+        /* Validation (scoped only to popup) */
+        /* ----------------------- */
+        #headerInfoDialog .field-validation-error {
+            color: #dc3545;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        body.modal-open {
+            overflow: hidden !important;
+            position: fixed;
+            width: 100%;
+        }
+
+
+
+        #headerInfoDialog .input-validation-error {
+            border: 2px solid #dc3545 !important;
+            background: #fff8f8 !important;
+        }
+
+        #headerInfoDialog .validation-summary-errors {
+            color: #dc3545;
+            padding: 15px;
+            border: 2px solid #dc3545;
+            background: #fff8f8;
+            margin-bottom: 15px;
+        }
+
+        /* Prevent collapsing (inside the popup only) */
+        #headerInfoDialog,
+        #headerInfoDialog .ui-dialog-content {
+            overflow: visible !important;
+        }
+
+        #headerInfoDialog {
+            max-height: none !important;
+            height: auto !important;
+        }
+
+            /* Visible custom popup header */
+            #modalHeader,
+            #headerInfoDialog .desktop-modal-header {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            /* Hide only the popup’s own close button */
+            #headerInfoDialog .ui-dialog-titlebar-close {
+                display: none !important;
+            }
+
+            /* Input styling — isolated to dialog */
+            #headerInfoDialog input,
+            #headerInfoDialog textarea {
+                border-radius: 4px;
+                box-sizing: border-box;
+                font-family: inherit !important;
+            }
+
+            #headerInfoDialog button {
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+
+        /* ------------------------------------------------- */
+        /* 🔥 CRITICAL: Protect slider arrows from popup CSS */
+        /* ------------------------------------------------- */
+
+        /* Restore arrows if any popup rule affected them */
+        .slideshow-container .prev,
+        .slideshow-container .next {
+            all: revert !important; /* Remove any inherited popup styles */
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            color: white !important;
+            font-size: 24px !important;
+            font-weight: bold !important;
+            padding: 16px !important;
+            cursor: pointer !important;
+            z-index: 9999 !important;
+            user-select: none !important;
+        }
+
+        .slideshow-container .prev {
+            left: 15px !important;
+        }
+
+        .slideshow-container .next {
+            right: 15px !important;
+        }
+
+        /* Hide jQuery UI default close button ALWAYS */
+        .ui-dialog .ui-dialog-titlebar-close {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="siteHeader">
+        <div id="divlogo">
+            <a asp-page="/Index"><img id="logoimg" src="/images/logo.png" /></a>
+        </div>
+
+        <div id="divmiddle">
+            <img id="middleimg" />
+        </div>
+
+        <div id="divemail">
+            <!-- open popup here (no navigation) -->
+            <a href="#" id="emailLink" title="Info"><img id="emailimg" /></a>
+        </div>
+    </header>
+
+    @RenderBody()
+
+    <!-- POPUP -->
+    <div id="headerInfoDialog" style="display:none;" title="Contacto">
+        <div class="modal-content">
+
+            <!-- FIXED HEADER INSIDE MODAL -->
+            <div id="modalHeader" class="desktop-modal-header">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <span style="font-size:16pt;font-weight:bold;color:#007bff">
+                                ¿Que artículo estás buscando?
+                            </span>
+                        </td>
+                        <td style="text-align:right">
+                            <button id="hdrBtnClose" type="button"
+                                    style="font-size:28px;border:none;background:none;cursor:pointer;">
+                                ×
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- DYNAMIC BODY (FORM OR SUCCESS MESSAGE) -->
+            <div id="modalBodyContent">
+
+                <div class="contact-form">
+                    <form id="headerForm" method="post" asp-page="/Index" asp-page-handler="Send">
+                        @Html.AntiForgeryToken()
+
+                        <div id="validationSummary" class="validation-summary-errors" style="display:none"></div>
+
+                        <table>
+                            <tr>
+                                <td><label for="hdrFullname" required>Nombre</label></td>
+                                <td>
+                                    <input style="width:100%" id="hdrFullname" name="fullname" />
+                                    <span data-valmsg-for="fullname" class="field-validation-error"></span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="hdrEmail" required>Email</label></td>
+                                <td>
+                                    <input style="width:100%" id="hdrEmail" name="email" type="email" />
+                                    <span data-valmsg-for="email" class="field-validation-error"></span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="hdrPhone" required>Teléfono</label></td>
+                                <td>
+                                    <input style="width:100%" id="hdrPhone" name="phone" pattern="^[0-9]+$" inputmode="numeric" />
+                                    <span data-valmsg-for="phone" class="field-validation-error"></span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><label for="hdrItem" required>Descripción artículo</label></td>
+                                <td>
+                                    <textarea style="width:100%" id="hdrItem" name="productId" rows="4"></textarea>
+                                    <span data-valmsg-for="productId" class="field-validation-error"></span>
+                                </td>
+                            </tr>
+
+                            <input type="hidden" id="recaptchaResponse" name="recaptchaResponse" />
+
+
+                            <tr>
+                                <td colspan="2" style="text-align:center">
+                                    <button id="hdrBtnSend" type="submit" class="mobile-submit-btn">
+                                        Enviar correo
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        window.RECAPTCHA_SITE_KEY = "@Configuration["ReCaptchaSettings:SiteKey"]";
+    </script>
+    <script src="~/js/headerDialog.js" asp-append-version="true"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=@Configuration["ReCaptchaSettings:SiteKey"]"></script>
+
+</body>
+</html>

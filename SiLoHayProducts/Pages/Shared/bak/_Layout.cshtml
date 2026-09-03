@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Products.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/EmailApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/slideshow_V2.css">
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/silohay.ico" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js"></script>
+
+    <script type="text/javascript" src="~/js/site.js"></script>
+
+</head>
+<body>
+    @if (!ViewData["HideHeader"]?.Equals(true) ?? true)
+    {
+        <header>
+            <div id="divlogo"><img src="/images/logo.png" /></div>
+            <div id="divmiddle"><img src="/images/esmerandonos.png" /></div>
+            <div id="divflag"><img src="/images/flag.png" /></div>
+            <div id="divemail"><img src="/images/email.png" /></div>
+        </header>
+    }
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    <partial name="_CookieConsentModal" />
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

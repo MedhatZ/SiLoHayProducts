@@ -1,0 +1,229 @@
+﻿@page
+@model SiLoHayProductsNew.Pages.IndexModel
+@{
+    //var product = Model.product;
+}
+@Html.AntiForgeryToken()
+<br />
+<div id="productsContainer">
+    @foreach (var product in Model.availableProducts)
+    {
+        <div style="margin-bottom: 15px; margin-right:15px; float: left;display: inline-block; vertical-align: top; border: 1px solid #ececec">
+
+            @if (product.IsAvailableNow == true)
+            {
+                <div style="color: royalblue; padding: 5px; font-family:Calibri; font-size: 13pt; font-weight: bold;height: 50px">
+                    Listo para recoger hoy en Santurce
+                </div>
+            }
+            else
+            {
+                <div style="height: 50px">
+                </div>
+            }
+            <div style="width: 300px; height: 300px; text-align: center">
+                <button class="openProductModal" data-product-id="@product.ProductId" data-price="@product.Price"
+                        data-name="@product.ProductName" data-prepayment="@product.Prepayment" data-imageurl="@product.ImageUrl"
+                        data-isvailablenow="@product.IsAvailableNow"
+                        style="border:none; background:none; padding:0;">
+                    <img class="imgproduct" src="@product.ImageUrl" alt="Product Image" style="padding: 10px">
+                </button>
+            </div>
+            <div style="float: left;height: 60px">
+                <div style="padding: 5px; width: 300px; font-family:Calibri; font-size: 14pt;line-height: 20px;">@product.ProductName</div>
+            </div>
+
+            <div style="color: #2A8703; padding: 5px; font-family:Calibri; font-size: 20pt; font-weight: bold;">$@product.Price</div>
+            <div style="color: black; padding: 5px; font-family:Calibri; font-size: 15px; font-weight: lighter;"> Compare con Amazon a $@product.AmazonPriceNew</div>
+        </div>
+    }
+</div>
+<div id="modal_dialog" style="display: none">
+    <form id="myForm">
+        <div class="modal-content">
+            <div class="modal-header">
+                
+                <table style="width:100%">
+                    <tr>
+                        <td><span style="font-weight: bold;font-size: 13pt; color: royalblue" id="modal-title"></span></td>
+                        <td style="text-align: right">
+                            <button id="btnclose" type="reset" style="padding: 0;border: none;background: none" value="Submit">
+                                <img src="~/images/close.png" >
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-body" data-table="table" data-id="">
+            </div>
+        </div>
+        <div id="itemdetaildiv" style="padding-top: 5px">
+            <div id="wrapper">
+                <div id="first"><span id="name"></span></div>
+                <div style="text-align: center" id="imagediv">
+                    <img id='imageurl' style="border: 1px solid lightgray" alt="Product Image" width="150">
+                </div>
+            </div>
+            <div style="color: #2A8703; padding: 5px; font-family:Calibri; font-size: 20pt; font-weight: bold;">
+                <span style="width: 90%" id="pricetag">$</span><span id="price"></span>
+                <label id="prepaymentlabel" style="color: black; padding: 5px; font-family:Calibri; font-size: 12pt; font-weight: normal" for="pricetag"> 
+                    (Pago inicial de $<span id="prepayment"></span>)</label><br>
+            </div>
+        </div>
+        <hr id="lineseparator" style="border-top: 3px solid #bbb;">
+        <label id="contactinfolabel" style="color: royalblue; font-size: 13pt; font-weight: bold;width: 90%">Info de contacto</label>
+        <div id="contactinfodiv" style="width: 100%;">
+
+            <div style="display: flex; padding-bottom: 15px">
+                <div style="width: 70px"><label for="fullname">Nombre</label></div>
+                <div><input id="fullname" type="text" name="fullname" data-val="true" data-val-required="requerido">&nbsp;<span style="font-size: smaller; color: red" data-valmsg-for="fullname" data-valmsg-replace="true"></span></div>
+            </div>
+
+            <div style="display: flex; padding-bottom: 15px">
+                <div style="width: 70px"><label for="email">Email</label></div>
+                <div><input id="email" type="email" name="email" data-val="true" data-val-email="inválido" data-val-required="requerido">&nbsp;<span style="font-size: smaller; color: red" data-valmsg-for="email" data-valmsg-replace="true"></span></div>
+            </div>
+
+
+            <div style="display: flex; padding-bottom: 15px">
+                <div style="width: 70px"><label for="phone">Teléfono</label></div>
+                <div><input id="phone" type="text" name="phone" data-val="true" data-val-required="requerido">&nbsp;<span style="font-size: smaller; color: red" data-valmsg-for="phone" data-valmsg-replace="true"></span></div>
+            </div>
+
+        </div>
+        <div id="divbuttons">
+        <button id="btnconfirm" class="button" type="submit">Confirmar</button>&nbsp;&nbsp;&nbsp;
+        </div>
+    </form>
+</div>
+
+<div id="pleasewaitmodal" style="display: none">
+    <div class="loading" style="text-align:center" id="loading"><img src="~/images/TincyWorking.gif" style="width:150px;" /><br />Enviando email...</div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+        <script type="text/javascript">
+        var selectedProduct = {};
+        $(document).ready(function () {
+            $("#productsContainer").on("click", ".openProductModal", function () 
+            {
+
+                selectedProduct.productId = $(this).data("product-id");
+                selectedProduct.imageUrl = $(this).data("imageurl");
+                selectedProduct.price = $(this).data("price");
+                selectedProduct.name = $(this).data("name");
+                selectedProduct.prepayment = $(this).data("prepayment");
+                selectedProduct.isvailablenow = $(this).data("isvailablenow");
+
+                // document.getElementById("email").value = "";
+                // document.getElementById("fullname").value = "";
+                // document.getElementById("phone").value = "";
+                document.getElementById("divbuttons").style.visibility = "visible";
+
+                //$("#fullname").removeAttr('required');​​​​​
+                // document.getElementById("myForm").reset();
+
+                $("#contactinfodiv").css("display", "block");
+                $("#contactinfolabel").text("Info de contacto");
+                $("#itemdetaildiv").css("display", "block");
+                $("#product-id").text($(this).data("product-id"));
+                  $("#name").text($(this).data("name"));
+                  $("#price").text($(this).data("price"));
+                  $("#product-id").text($(this).data("product-id"));
+                  $('#imageurl').attr('src',$(this).data("imageurl"));
+
+                  if ($(this).data("isvailablenow") == "True")
+                  {
+                      ($(this).data("isvailablenow"));
+                      $("#modal-title").text("Listo para recoger hoy");
+                      document.getElementById("prepaymentlabel").style.visibility = "hidden";
+                  }
+                  else
+                  {
+                      $("#prepayment").text(selectedProduct.prepayment);
+                      document.getElementById("prepaymentlabel").style.visibility = "visible";
+                      $("#modal-title").text("");
+                  }
+                  $("#modal_dialog").dialog({
+                    modal: true,
+                    width: 400
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize the validator
+            var validator = $("#myForm").validate({
+                // Prevent the default error message popup
+                errorPlacement: function(error, element) {
+                    error.appendTo(element.nextAll("span.field-validation-valid").first());
+                }
+            });
+
+           $("#myForm").submit(function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                if ($("#myForm").valid()) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Index?handler=Send",
+                        data: {
+                            "productId": selectedProduct.productId,
+                            "name": selectedProduct.name,
+                            "imageUrl": selectedProduct.imageUrl,
+                            "fullname": $("#fullname").val(),
+                            "phone": $("#phone").val(),
+                            "email": $("#email").val()
+                        },
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                              $("#pleasewaitmodal").dialog({
+                                modal: true,
+                                width: 200
+                            });
+
+                            //$('#loading').show();  // show loading indicator
+                            //$('#pleasewaitmodal').show();  // show loading indicator
+                            //document.getElementById("divbuttons").style.visibility = "hidden";
+                        },
+                        success: function (response) {
+                            $("#modal-title").text("");
+                            $("#itemdetaildiv").css("display", "none");
+                            $("#contactinfodiv").css("display", "none");
+                            $("#contactinfolabel").html("Gracias por su interes. <br><br>Nos estaremos comunicando con usted lo antes posible.");
+                            // document.getElementById('btnconfirm').style.display="none";  // for hide button
+                            //document.getElementById("btnconfirm").style.visibility = "hidden";
+                            document.getElementById("divbuttons").style.visibility = "hidden";
+                            document.getElementById('lineseparator').style.display="none";
+                        },
+                        complete: function()
+                        {
+                            $("#pleasewaitmodal").dialog("close");
+                            //$('#loading').hide();  // show loading indicator
+                        },
+                        error: function (error) {
+                            // Handle error
+                        }
+                    });
+                }
+            });
+
+
+            $("#btnclose").click(function(e) {
+                e.preventDefault();
+                validator.resetForm();
+                $("#myForm")[0].reset();
+                $(".field-validation-valid span").text('');
+                $("#modal_dialog").dialog("close");
+            });
+        });
+    </script>
+}

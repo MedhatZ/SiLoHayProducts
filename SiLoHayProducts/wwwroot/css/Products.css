@@ -1,0 +1,1287 @@
+﻿/* Prevent scrolling when modal or mobile slide page is open */
+body.ui-dialog-open {
+    overflow: hidden !important;
+}
+
+body.mobile-page-open {
+    overflow: hidden !important;
+}
+
+#contactinfodiv {
+    font-size: 12pt;
+    font-weight: normal;
+    padding: 15px;
+}
+
+#name {
+    font-size: 10pt;
+    font-weight: normal;
+}
+
+.labelrecogidoModal {
+    font-family: verdana;
+    font-size: 9pt;
+    color: black;
+}
+
+.labelpriceModal {
+    font-family: verdana;
+    font-size: 11pt;
+    color: black;
+    padding: 0px;
+}
+
+
+.ui-widget-overlay {
+    opacity: .80 !important; /* Make sure to change both of these, as IE only sees the second one */
+    filter: Alpha(Opacity=80) !important;
+    background: rgb(50, 50, 50) !important; /* This will make it darker */
+}
+
+#wrapper {
+    width: 100%;
+    overflow: hidden; /* will contain if #first is longer than #second */
+}
+
+#first { /* From modal popup */
+    width: 100%;
+    padding-left: 10px;
+    /*padding: 10px 15px; commented 10/17/25 */
+    font-family: verdana;
+    font-size: 16pt;
+    font-weight: bold;
+    /*text-align: center; commented 10/17/25 */
+}
+
+#second {
+    text-align: right;
+    overflow: hidden; /* if you don't want #second to wrap below #first */
+}
+
+.ui-dialog-titlebar {
+    display: none;
+}
+
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    z-index: 10000;
+}
+
+#contactinfolabel {
+    font-family: verdana;
+    font-size: 10pt;
+    color: black;
+    font-weight: bold;
+    padding: 15px;
+    text-align: center;
+}
+
+#btnconfirm {
+    background-color: #04AA6D;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    margin: 15px;
+    width: calc(100% - 30px);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.productsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#productsContainer {
+    margin-top: 20px;
+}
+
+#modal_dialog {
+    padding: 0px;
+}
+
+/* Ensure modal dialog header is always visible */
+.ui-dialog {
+    z-index: 10001 !important; /* Higher than fixed header (1000) */
+}
+
+/* Ensure modal backdrop appears above fixed header */
+.ui-widget-overlay {
+    z-index: 10000 !important;
+}
+
+.ui-dialog .ui-dialog-content {
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+/* Hide jQuery UI dialog titlebar completely */
+.ui-dialog .ui-dialog-titlebar {
+    display: none !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    display: none !important;
+}
+
+/* Ensure modal headers are properly styled */
+.desktop-modal-header {
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    /*padding: 10px 15px !important;*/
+    font-weight: bold !important;
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#itemdetaildiv {
+    /*padding: 10px 15px; commented 10/17/25*/
+}
+
+.imgproduct {
+    height: 85%;
+    width: 90%;
+    cursor: pointer;
+    object-fit: contain;
+}
+
+.imgproductModal {
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+    object-fit: contain;
+}
+
+.openProductModal {
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    object-fit: contain;
+    border: none;
+    background: none;
+    padding: 0;
+}
+
+.divimage {
+    width: 100%;
+    aspect-ratio: 1/1;
+    text-align: center;
+    display: flex; /* Make the div a flex container */
+    justify-content: center; /* Center horizontally (optional) */
+    align-items: center; /* Center vertically */
+    /*background-color: red; */
+}
+
+.divimagemodal {
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divproductname {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* Number of lines to show */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Ensures ellipsis appears if text overflows the line-clamp */
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 95%;
+    padding-left: 8px;
+    font-family: verdana;
+    font-size: 11pt;
+    line-height: 20px;
+    float: left;
+    height: 47px;
+    color: royalblue;
+    text-align: left;
+}
+
+.contactlabel {
+    font-size: 11pt;
+}
+
+.divrecogido, .divcompare {
+    color: royalblue;
+    width: 100%;
+    font-family: verdana;
+    font-size: clamp(11px, 1.2vw, 13px);
+    height: 15px;
+    text-align: center;
+    /*    padding-top: 15px; commented 10/21/25
+    padding-bottom: 5px;*/
+    white-space: nowrap;
+}
+
+.divcompare {
+    text-align: left;
+    color: #666666;
+}
+
+.desktop-text {
+    white-space: nowrap;
+}
+
+.divisavailabledots {
+    height: 20px;
+    text-align: center;
+}
+
+.divproductprice { /* This is for the main page price */
+    padding: 5px;
+}
+
+.productprice {
+    color: #2A8703;
+    font-family: verdana;
+    font-size: 12pt;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.contactlabels {
+    font-family: verdana;
+    font-size: 8pt;
+}
+
+.divouterproductcontainer {
+    width: 20%;
+    margin-bottom: 35px; /* bottom spacing between cells */
+    /* margin-right: 15px; */
+    float: left;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.divinnerproductcontainer {
+    width: 95%;
+    border: 1px solid #ececec;
+    display: inline-block;
+}
+/* Hide mobile elements on desktop by default */
+.mobile-header,
+.mobile-banner {
+    display: none !important;
+}
+
+/* Desktop Overlay Banner */
+.desktop-banner {
+    position: relative;
+    width: 100%;
+    /*    height: 180px;*/
+    overflow: hidden;
+    padding: 8px;
+    text-align: center;
+}
+
+.banner-image {
+    width: 80%;
+    height: 80%;
+    object-fit: fill;
+    object-position: center;
+}
+
+/* Responsive banner sizing */
+@media only screen and (min-width: 1200px) {
+    /*    .desktop-banner {
+        height: 220px;
+    }*/
+}
+
+@media only screen and (min-width: 1400px) {
+    /*    .desktop-banner {
+        height: 300px;
+    }*/
+}
+
+@media only screen and (max-width: 1024px) {
+    /*    .desktop-banner {
+        height: 150px;
+    }*/
+}
+
+@media only screen and (max-width: 900px) {
+    /*    .desktop-banner {
+        height: 120px;
+    }*/
+}
+
+/* Hide desktop banner on mobile */
+@media only screen and (max-width: 768px) {
+    /*    .desktop-banner {
+        display: none !important;
+    }*/
+}
+
+.mobile-text {
+    display: none !important;
+    white-space: nowrap;
+}
+
+/* Ensure desktop layout is not affected by mobile wrapper */
+.divproductdetails {
+    display: contents;
+}
+
+.divproductcontent {
+    display: contents;
+}
+
+.divimagecolumn {
+    display: contents;
+}
+
+/* Hide mobile pickup text on desktop */
+.divmobilepickup {
+    display: none !important;
+}
+
+/* Mobile Modal Header - Hidden on desktop */
+.mobile-modal-header {
+    display: none !important;
+}
+
+/* Desktop Modal Header - Hidden on mobile */
+.desktop-modal-header {
+    display: block;
+}
+
+/* Mobile Slide Page - Hidden by default */
+.mobile-slide-page {
+    position: fixed;
+    top: 80px; /* Start below fixed header */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 80px); /* Height minus fixed header */
+    background-color: white;
+    z-index: 999; /* Lower than fixed header (1000) */
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out !important;
+    overflow-y: auto;
+    display: none; /* Hidden on desktop */
+}
+
+    .mobile-slide-page.slide-in {
+        transform: translateX(0) !important;
+    }
+
+/* Mobile Layout with Header and Banner */
+@media only screen and (max-device-width: 768px), only screen and (max-width: 768px) {
+
+    /* Show mobile elements */
+    .mobile-header,
+    /*    .mobile-banner {
+        display: block !important;
+    }
+*/
+    .mobile-text {
+        display: inline !important;
+        color: #666;
+        font-style: italic;
+    }
+
+    .desktop-text {
+        display: none !important;
+        white-space: nowrap;
+    }
+
+    /* Hide desktop modal header on mobile */
+    .desktop-modal-header {
+        display: none !important;
+    }
+
+    /* Show mobile modal header on mobile */
+    .mobile-modal-header {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #007bff;
+        padding: 15px 20px;
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1001;
+        height: 60px;
+    }
+
+    .mobile-modal-title {
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        text-align: center;
+        flex: 1;
+    }
+
+
+    /* Mobile Modal Full Screen - Start below mobile header only */
+    #modal_dialog {
+        /*width: 100% !important;*/
+        height: calc(100% - 80px) !important; /* Account for mobile header only */
+        /*max-width: 100% !important;*/
+        max-height: calc(100% - 80px) !important;
+        top: 80px !important; /* Start below mobile header only */
+        left: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+    }
+
+    .labels {
+        font-size: 8pt;
+        color: red;
+    }
+
+    .ui-dialog {
+        width: 100% !important;
+        height: calc(100% - 80px) !important;
+        max-width: 100% !important;
+        max-height: calc(100% - 80px) !important;
+        top: 80px !important;
+        left: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+    }
+
+    .ui-dialog-content {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow-y: auto !important;
+    }
+
+    .modal-content {
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .modal-body {
+        flex: 1 !important;
+        padding: 20px !important;
+        margin-top: 0 !important; /* No margin needed since header is relative */
+        overflow-y: auto !important;
+    }
+
+    /* Mobile Modal Content Layout */
+    #itemdetaildiv {
+        margin-bottom: 30px;
+    }
+
+    #wrapper {
+        margin-bottom: 20px;
+    }
+
+    .divimagemodal {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .imgproductModal {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+    }
+
+    #first {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    /* Mobile Form Styling */
+    #contactinfolabel {
+        font-size: 16px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    #contactinfodiv {
+        margin-bottom: 20px;
+    }
+
+        #contactinfodiv > div {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #contactinfodiv label {
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: bold;
+            min-width: 60px;
+            flex-shrink: 0;
+        }
+
+        #contactinfodiv input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+    #btnconfirm {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        margin-top: 15px;
+    }
+
+    /* Mobile Slide Page Styling */
+    .mobile-page-header {
+        background-color: white;
+        padding: 15px 0px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        height: 60px;
+    }
+
+        .mobile-page-header button {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .mobile-page-header button svg {
+                width: 24px;
+                height: 24px;
+            }
+
+    .mobile-page-title {
+        color: #007bff;
+        font-weight: bold;
+        font-size: 14px;
+        text-align: center;
+        flex: 1;
+    }
+
+    .header-spacer {
+        width: 40px;
+    }
+
+    .mobile-page-content {
+        padding: 20px;
+        padding-top: 0;
+    }
+
+    .mobile-product-image {
+        text-align: center;
+        margin-bottom: 0px;
+    }
+
+        .mobile-product-image img {
+            width: 250px;
+            height: 250px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+    .mobile-product-info {
+        margin-bottom: 20px;
+    }
+
+        .mobile-product-info h2 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 0;
+            color: black;
+            line-height: 1.3;
+            text-align: center;
+        }
+
+    .mobile-product-details {
+        margin-bottom: 10px;
+    }
+
+    .mobile-product-price {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2A8703;
+        margin-bottom: 10px;
+        text-align: start;
+    }
+
+    .mobile-product-compare {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 0px;
+        text-align: start;
+    }
+
+
+    .mobile-contact-section {
+        border-top: 2px solid #e0e0e0;
+        padding-top: 0px;
+    }
+
+        .mobile-contact-section h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: black;
+        }
+
+        .mobile-contact-section p {
+            margin-bottom: 15px;
+            color: #666;
+            font-size: 14px;
+        }
+
+
+    .form-group {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .form-group label {
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: bold;
+            color: #333;
+            width: 70px;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+            min-width: 0;
+            width: 100%;
+        }
+
+            .form-group input.error {
+                border-color: #dc3545;
+            }
+
+        .form-group .error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+
+    .mobile-submit-btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 18px;
+        background-color: #04AA6D;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+        .mobile-submit-btn:hover {
+            background-color: #038a5a;
+        }
+
+    /* Show mobile slide page on mobile */
+    .mobile-slide-page {
+        display: block !important;
+    }
+
+
+    /* Mobile Header */
+    .mobile-header {
+        background-color: #FF8C00;
+        padding: 10px;
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+
+    .mobile-logo {
+        background-color: white;
+        padding: 8px 12px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .cart-icon {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .mobile-logo-text {
+        color: #FF8C00;
+        font-weight: bold;
+        font-size: 16pt;
+        white-space: nowrap;
+    }
+
+    .mobile-envelope {
+        background-color: transparent;
+        color: white;
+        font-size: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Mobile Banner */
+    /*    .mobile-banner {
+        width: 100%;
+        overflow: hidden;
+        padding: 3px;
+    }
+
+    .mobile-banner-image {
+        width: 100%;
+        height: auto;
+        object-fit: fill;
+        object-position: center;
+    }*/
+}
+
+/* Mobile Layout - Single Column with Two-Column Product Items */
+@media only screen and (max-device-width: 768px), only screen and (max-width: 768px) {
+    /* Single column layout for products */
+    .divouterproductcontainer {
+        width: 100%;
+        height: auto;
+        float: none;
+        display: block;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 15px;
+    }
+
+    .divinnerproductcontainer {
+        width: 100%;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    /* Desktop pickup text - hidden on mobile */
+    .divrecogido {
+        display: none !important;
+    }
+
+    /* Product content row - contains image and details side by side */
+    .divproductcontent {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 15px;
+        width: 100%;
+        order: 1;
+    }
+
+    /* Product image - left column */
+    .divimage {
+        width: 120px;
+        height: 120px;
+        flex-shrink: 0;
+        aspect-ratio: 1/1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Product details container - right column with mobile pickup text */
+    .divproductdetails {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Mobile pickup text - appears at top of details column */
+    .divmobilepickup {
+        font-family: verdana;
+        font-size: clamp(11px, 2.5vw, 13px);
+        color: #666;
+        font-style: italic;
+        margin-bottom: 8px;
+        display: block !important; /* Force display on mobile */
+        white-space: nowrap;
+    }
+
+    .mobile-text {
+        color: #666 !important;
+        font-style: italic !important;
+        display: inline !important;
+        white-space: nowrap;
+        font-size: clamp(9px, 2.5vw, 12px);
+    }
+
+    .divproductname {
+        font-size: 14pt;
+        font-weight: bold;
+        line-height: 1.3;
+        height: auto;
+        padding: 0;
+        margin: 0 0 8px 0;
+        color: black;
+        order: 2;
+    }
+
+    .divproductprice {
+        font-size: 18pt;
+        font-weight: bold;
+        color: #2A8703;
+        padding: 0;
+        margin: 0 0 5px 0;
+        order: 3;
+    }
+
+    /*    .divcompare {
+        font-size: 12pt;
+        color: #666;
+        padding: 0;
+        margin: 0;
+        order: 4;
+    }
+*/
+    .divisavailabledots {
+        display: none !important; /* Hide dots on mobile */
+        order: 5;
+    }
+
+    /* Additional mobile styling */
+    .openProductModal {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: none;
+        background: none;
+        margin-left: 10px;
+    }
+
+    .imgproduct {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 4px;
+    }
+
+    #modal_dialogue {
+        width: 100%;
+    }
+}
+
+/* Height-based scaling for mobile product detail page - applies to ALL screen sizes */
+/* iPhone SE and similar devices (375x667) */
+@media only screen and (max-height: 667px) and (min-height: 600px) {
+    /* Keep slide page full screen - no top positioning needed */
+
+    /* Keep header unchanged - don't modify mobile-page-header */
+
+    .mobile-page-content {
+        padding: 15px;
+        padding-top: 0;
+    }
+
+    .mobile-product-image img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .mobile-product-info h2 {
+        font-size: 18px;
+        margin-bottom: 6px;
+    }
+
+    .mobile-product-price {
+        font-size: 20px;
+        margin-bottom: 6px;
+    }
+
+    .mobile-product-compare {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+
+    .mobile-contact-section {
+        padding-top: 10px;
+    }
+
+        .mobile-contact-section h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .mobile-contact-section p {
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+    .form-group {
+        margin-bottom: 10px;
+        gap: 6px;
+    }
+
+        .form-group label {
+            width: 70px;
+            font-size: 13px;
+        }
+
+        .form-group input {
+            padding: 8px;
+            font-size: 13px;
+            width: 100%;
+        }
+
+    .mobile-submit-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* iPhone SE specific (375x667) - more precise targeting */
+@media only screen and (max-width: 375px) and (max-height: 667px) and (min-height: 600px) {
+    /* Keep slide page full screen - no top positioning needed */
+
+    /* Keep header unchanged - don't modify mobile-page-header */
+
+    .mobile-page-content {
+        padding: 12px;
+        padding-top: 0;
+    }
+
+    .mobile-product-image img {
+        width: 180px;
+        height: 180px;
+    }
+
+    .mobile-product-info h2 {
+        font-size: 16px;
+        margin-bottom: 4px;
+    }
+
+    .mobile-product-price {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+
+    .mobile-product-compare {
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+
+    .mobile-contact-section {
+        padding-top: 8px;
+    }
+
+        .mobile-contact-section h3 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .mobile-contact-section p {
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+    .form-group {
+        margin-bottom: 8px;
+        gap: 4px;
+    }
+
+        .form-group label {
+            width: 60px;
+            font-size: 12px;
+        }
+
+        .form-group input {
+            padding: 6px;
+            font-size: 12px;
+            width: 100%;
+        }
+
+    .mobile-submit-btn {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
+
+/* Short screens (height < 600px) */
+@media only screen and (max-height: 600px) {
+    /* Keep slide page full screen - no top positioning needed */
+
+    /* Keep header unchanged - don't modify mobile-page-header */
+
+    .mobile-page-content {
+        padding: 15px;
+        padding-top: 0;
+    }
+
+    .mobile-product-image img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .mobile-product-info h2 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .mobile-product-price {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .mobile-product-compare {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .mobile-contact-section {
+        padding-top: 10px;
+    }
+
+        .mobile-contact-section h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .mobile-contact-section p {
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+    .form-group {
+        margin-bottom: 10px;
+        gap: 6px;
+    }
+
+        .form-group label {
+            width: 70px;
+            font-size: 13px;
+        }
+
+        .form-group input {
+            padding: 8px;
+            font-size: 13px;
+            width: 100%;
+        }
+
+    .mobile-submit-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* Very short screens (height < 500px) */
+@media only screen and (max-height: 500px) {
+    /* Keep slide page full screen - no top positioning needed */
+
+    /* Keep header unchanged - don't modify mobile-page-header */
+
+    .mobile-page-content {
+        padding: 10px;
+        padding-top: 0;
+    }
+
+    .mobile-product-image img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .mobile-product-info h2 {
+        font-size: 16px;
+        margin-bottom: 6px;
+    }
+
+    .mobile-product-price {
+        font-size: 18px;
+        margin-bottom: 6px;
+    }
+
+    .mobile-product-compare {
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+
+    .mobile-contact-section {
+        padding-top: 8px;
+    }
+
+        .mobile-contact-section h3 {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .mobile-contact-section p {
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+    .form-group {
+        margin-bottom: 8px;
+        gap: 4px;
+    }
+
+        .form-group label {
+            width: 60px;
+            font-size: 12px;
+        }
+
+        .form-group input {
+            padding: 6px;
+            font-size: 12px;
+            width: 100%;
+        }
+
+    .mobile-submit-btn {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
+
+/* Extremely short screens (height < 400px) */
+@media only screen and (max-height: 400px) {
+    /* Keep slide page full screen - no top positioning needed */
+
+    /* Keep header unchanged - don't modify mobile-page-header */
+
+    .mobile-page-content {
+        padding: 8px;
+        padding-top: 0;
+    }
+
+    .mobile-product-image img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .mobile-product-info h2 {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .mobile-product-price {
+        font-size: 16px;
+        margin-bottom: 4px;
+    }
+
+    .mobile-product-compare {
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+
+    .mobile-contact-section {
+        padding-top: 6px;
+    }
+
+        .mobile-contact-section h3 {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .mobile-contact-section p {
+            font-size: 11px;
+            margin-bottom: 6px;
+        }
+
+    .form-group {
+        margin-bottom: 6px;
+        gap: 3px;
+    }
+
+        .form-group label {
+            width: 55px;
+            font-size: 11px;
+        }
+
+        .form-group input {
+            padding: 4px;
+            font-size: 11px;
+            width: 100%;
+        }
+
+    .mobile-submit-btn {
+        padding: 6px;
+        font-size: 12px;
+    }
+}
+
+/* Extra small phones (320px and below) */
+@media only screen and (max-width: 360px) {
+    .mobile-page-content {
+        padding: 15px;
+        padding-top: 0;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+        gap: 6px;
+    }
+
+        .form-group label {
+            width: 60px;
+            font-size: 13px;
+        }
+
+        .form-group input {
+            padding: 6px;
+            font-size: 13px;
+            width: 100%;
+        }
+
+    .mobile-submit-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .mobile-product-image img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .mobile-product-info h2 {
+        font-size: 18px;
+    }
+
+    .mobile-product-price {
+        font-size: 20px;
+    }
+}

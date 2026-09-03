@@ -1,0 +1,137 @@
+﻿@page
+@model SiLoHayProductsNew.Pages.ContactUsModel
+@{
+    ViewData["Title"] += "SiLoHay.com - Comuníquese con nosotros";
+    ViewData["HideHeader"] = false;
+}
+@inject IConfiguration configuration
+@{
+    var siteKey = configuration["ReCaptchaSettings:SiteKey"];
+}
+
+<table id="table1" style="font-size: 16pt;font-family: Arial, Helvetica, sans-serif;color: #41464b;padding-bottom: 20px;vertical-align: top; margin-left:0; padding-left:0; margin-top:40px; ">
+    <tbody>
+        <tr>
+            <td style="text-align: left;">
+            </td>
+        </tr>
+        <tr>
+            <td width="70%" style="vertical-align: top;">
+                <span style=" line-height: 1.7;">¿Estás buscando un artículo que no ves en SiLoHay.com?</span>
+                <br />
+                <span style=" line-height: 1.7;">¿Tienes alguna duda o pregunta sobre SiLoHay.com?</span>
+                <br />
+                <span style=" line-height: 1.7;">¿Quizás tienes alguna inquietud espiritual?</span>
+                <br /><br />
+                <span style="font-size: 17pt;font-family: verdana;color: #41464b">
+                    Estamos aquí para servirte - te responderemos lo antes posible.
+                </span>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </tbody>
+</table>
+
+<hr style="border: 1px solid #000; margin-top: 20px;">
+
+<span style="font-size: 17pt;font-family: verdana;color: #41464b; line-height: 1.7;">
+    Se pueden comunicar por aquí o a nuestro correo electrónico: <span class="text-primary">ayuda@SiLoHay.com</span>
+</span>
+<br />
+<br />
+
+<form id="myForm" method="post">
+    <table class="table table-borderless" style="font-size: 17pt;font-family: verdana;color: #41464b;">
+        <tr>
+            <td style="width: 30%;"><label for="Nombre">Nombre:</label></td>
+            <td><input style="width: 100%" type="text" asp-for="Nombre" id="Nombre" required /></td>
+        </tr>
+        <tr>
+            <td style="width: 10%;"><label for="Telefono">Telefono:</label></td>
+            <td><input style="width: 100%" type="text" asp-for="Telefono" id="Telefono" required /></td>
+        </tr>
+        <tr>
+            <td style="width: 10%;"><label for="Email">Email:</label></td>
+            <td><input style="width: 100%" type="email" asp-for="Email" id="Email" required /></td>
+        </tr>
+        <tr>
+            <td style="width: 10%;"><label for="Titulo">Titulo:</label></td>
+            <td><input style="width: 100%" type="text" asp-for="Titulo" id="Titulo" required /></td>
+        </tr>
+        <tr>
+            <td style="width: 10%;"><label for="Pregunta">Pregunta:</label></td>
+            <td><textarea name="Pregunta" cols="40" rows="5" style="width: 100%" type="text" asp-for="Pregunta" id="Pregunta" required></textarea></td>
+        </tr>
+    </table>
+    <input type="submit" />
+</form>
+<div id="pleasewaitmodal" style="display: none">
+    <div class="loading" style="text-align:center" id="loading"><img src="~/images/TincyWorking.gif" style="width:150px;" /><br />Enviando email...</div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+        <script src="https://www.google.com/recaptcha/api.js?render=@siteKey"></script>
+
+        <script>
+            $(document).ready(function() {
+                var recaptchaToken = null;
+                grecaptcha.ready(function() {
+                    grecaptcha.execute('@siteKey', { action: 'contact' }).then(function(token) {
+                        recaptchaToken = token;
+                    });
+                });
+
+                var validator = $("#myForm").validate({
+                    errorPlacement: function(error, element) {
+                        error.appendTo(element.nextAll("span.field-validation-valid").first());
+                    }
+                });
+
+                $("#myForm").submit(function(event) {
+                    event.preventDefault();
+
+                    if (recaptchaToken === null) {
+                        alert("Por favor, espera mientras se verifica reCAPTCHA.");
+                        return;
+                    }
+
+                    if ($("#myForm").valid()) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/ContactUs?handler=Send",
+                            data: {
+                                "Nombre": $("#Nombre").val(),
+                                "Telefono": $("#Telefono").val(),
+                                "Email": $("#Email").val(),
+                                "Titulo": $("#Titulo").val(),
+                                "Pregunta": $("#Pregunta").val(),
+                                "recaptchaResponse": recaptchaToken
+                            },
+                            beforeSend: function(xhr) {
+                                xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                                $("#pleasewaitmodal").dialog({
+                                    modal: true,
+                                    width: 200
+                                });
+                            },
+                            success: function(response) {
+                                alert("Muchas fracias por su interés. Nos estaremos comunicando con usted lo antes posible.");
+                                window.location.href = "/Index";
+                            },
+                            complete: function() {
+                                $("#pleasewaitmodal").dialog("close");
+                            },
+                            error: function(error) {
+                                alert('error');
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+}

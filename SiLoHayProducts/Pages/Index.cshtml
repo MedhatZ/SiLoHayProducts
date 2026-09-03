@@ -1,0 +1,549 @@
+﻿@page
+@model SiLoHayProductsNew.Pages.IndexModel
+@{
+}
+@inject IConfiguration configuration
+@{
+    var siteKey = configuration["ReCaptchaSettings:SiteKey"];
+}
+
+<link rel="stylesheet" href="~/css/Products.css" />
+<link rel="stylesheet" href="~/css/IndexBanner.css" />
+<script src="~/js/IndexBanner.js"></script>
+
+<style>
+    .grecaptcha-badge {
+        visibility: hidden;
+    }
+</style>
+
+
+
+<!-- Desktop Overlay Banner -->
+<!-- Slideshow container -->
+
+@* <div class="desktop-banner">
+    <img src="~/images/top-banner.png" alt="Promotional Banner" class="banner-image">
+</div>
+<div class="mobile-banner">
+    <img src="~/images/top-banner.png" alt="Promotional Banner" class="mobile-banner-image">
+</div>
+ *@
+<br />
+<div class="slideshow-container">
+
+    <!-- Full-width images with number and caption text -->
+    <div class="mySlides fade" style="display: block;">
+        @* <a href="https://www.google.com/" target="_blank"> *@
+        <img src="~/images/top-banner.png" style="width:100%"></a>
+    </div>
+
+    <div class="mySlides fade" style="display: none;">
+        @* <a href="https://espanol.yahoo.com/" target="_blank"> *@
+        <img src="~/images/top-banner2.png" style="width:100%"></a>
+    </div>
+
+    <div class="mySlides fade" style="display: none;">
+        @* <a href="https://www.usatoday.com/" target="_blank"> *@
+        <img src="~/images/top-banner3.png" style="width:100%"></a>
+    </div>
+
+    <!-- Next and previous buttons -->
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a id="next" class="next" onclick="plusSlides(1)">❯</a>
+</div>
+
+<!-- The dots/circles -->
+@*   <div style="text-align:center">
+    <span class="dot active" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+  </div>
+ *@  
+ <br>
+
+<div id="productsContainer">
+    @foreach (var product in Model.availableProducts)
+    {
+        <div class="divouterproductcontainer">
+            <div class="divinnerproductcontainer">
+                <!-- Desktop Pickup Text (Above Image) -->
+                <div class="divrecogido">
+                    @if (product.IsAvailableNow == true)
+                    {
+                        <span class="desktop-text">Listo para recoger en Santurce</span>
+                        <span class="mobile-text">* Listo para recoger en Santurce *</span>
+                    }
+                    else
+                    {
+                        <span class="desktop-text"></span>
+                        <span class="mobile-text"></span>
+                    }
+                </div>
+
+                <!-- Product Content Row - Image and Details Side by Side -->
+                <div class="divproductcontent">
+                    <!-- Product Image -->
+                    <div class="divimage">
+                        <button class="openProductModal"
+                                type="button"
+                                data-product-id="@product.ProductId"
+                                data-price="@product.Price"
+                                data-name="@product.ProductName"
+                                data-prepayment="@product.Prepayment"
+                                data-imageurl="@product.ImageUrl"
+                                data-isvailablenow="@product.IsAvailableNow"
+                                data-amazon-price="@product.PriceNew">
+                            <img id="@product.ProductId" class="imgproduct" src="@product.ImageUrl" alt="Product Image">
+                        </button>
+                    </div>
+                    <div class="divisavailabledots">
+                        @if (product.IsAvailableNow == true)
+                        {
+                            <span class="dot" onclick="currentSlide(1, '@product.ImageUrl', '@product.ProductId')"></span>
+                            <span class="dot" onclick="currentSlide(2, '@product.ImageUrl2', '@product.ProductId')"></span>
+                        }
+                    </div>
+
+                    <!-- Product Details Container -->
+                    <div class="divproductdetails">
+                        <!-- Mobile pickup text - appears at top of details column -->
+                        <div class="divmobilepickup">
+                            @if (product.IsAvailableNow == true)
+                            {
+                                <span>* Listo para recoger en Santurce *</span>
+                            }
+                        </div>
+                        <div class="divproductname">@product.ProductName</div>
+                        <div class="divproductprice productprice">$@product.Price</div>
+                        <div class="divcompare">
+                            @if (product.ShowComparisonMsg == true)
+                            {
+                                <span class="desktop-text">Compare con @product.StoreUsedForComparison a $@product.PriceNew</span>
+                            }
+                            else
+                            {
+                                <span class="desktop-text"></span>
+                                <span class="mobile-text"></span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- DESKTOP MODAL -->
+<div id="modal_dialog" style="display: none">
+    <form id="myForm">
+        @Html.AntiForgeryToken()
+        <div class="modal-content">
+            <!-- Mobile Modal Header -->
+            <div class="mobile-modal-header">
+                <button id="btnback" type="button" style="padding:0;border:none;background:none">
+                    <span style="font-size:24px;color:white;">&lt;</span>
+                </button>
+                <span class="mobile-modal-title">Listo para recoger en Santurce</span>
+                <div style="width:40px;"></div>
+            </div>
+
+            <!-- Desktop Modal Header -->
+            <div class="desktop-modal-header">
+                <table style="width:100%">
+                    <tr>
+                        <td><span style="font-weight:bold;font-size:13pt;color:royalblue" id="modal-title"></span></td>
+                        <td style="text-align:right">
+                            <button id="btnclose" type="reset" style="padding:0;border:none;background:none" value="Submit">
+                                <img src="~/images/close.png">
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-body" data-table="table" data-id=""></div>
+        </div>
+
+        <div id="itemdetaildiv">
+            <div id="wrapper">
+                <div class="divimagemodal">
+                    <img class="imgproductModal" id='imageurl'>
+                </div>
+                <div class="divproductname"><span id="name"></span></div>
+            </div>
+            <div class="productprice">
+                <span style="width:90%" id="pricetag">$</span><span id="price"></span>
+                <label id="prepaymentlabel"
+                       style="color:black;padding:5px;font-family:Calibri;font-size:12pt;font-weight:normal"
+                       for="pricetag">
+                    (Pago inicial de $<span id="prepayment"></span>)
+                </label><br>
+            </div>
+        </div>
+
+        <hr id="lineseparator" style="border-top:3px solid #bbb;">
+        <label id="contactinfolabel">¿Te interesa?</label>
+
+        <div id="contactinfodiv" style="padding-top:5px;width:100%;">
+            <table>
+                <tr>
+                    <td><label class="contactlabels" for="fullname">Nombre</label></td>
+                    <td><input style="width:100%" id="fullname" type="text" name="fullname" data-val="true" data-val-required="*"></td>
+                    <td><span style="font-size:smaller;color:red" data-valmsg-for="fullname" data-valmsg-replace="true"></span></td>
+                </tr>
+                <tr>
+                    <td><label class="contactlabels" for="email">Email</label></td>
+                    <td><input id="email" type="email" name="email" data-val="true" data-val-email="inválido" data-val-required="*"></td>
+                    <td><span style="font-size:smaller;color:red" data-valmsg-for="email" data-valmsg-replace="true"></span></td>
+                </tr>
+                <tr>
+                    <td><label class="contactlabels" for="phone">Teléfono</label></td>
+                    <td><input id="phone" type="text" name="phone" data-val="true" data-val-required="*"></td>
+                    <td><span style="font-size:smaller;color:red" data-valmsg-for="phone" data-valmsg-replace="true"></span></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <div id="divbuttons">
+                            <button id="btnconfirm" class="button" type="submit">Enviar correo</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<!-- PLEASE WAIT MINI DIALOG -->
+<div id="pleasewaitmodal" style="display:none">
+    <div class="loading" style="text-align:center" id="loading">
+        <img src="~/images/TincyWorking.gif" style="width:150px;" /><br />Enviando email...
+    </div>
+</div>
+
+<!-- MOBILE PRODUCT PAGE -->
+<div id="mobile-product-page" class="mobile-slide-page">
+    <div class="mobile-page-header">
+        <button id="btnbackmobile" type="button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <span class="mobile-page-title">Listo para recoger en Santurce</span>
+        <div class="header-spacer"></div>
+    </div>
+
+    <div class="mobile-page-content">
+        <div class="mobile-product-info">
+            <h2 id="mobile-product-name" style="margin:0;"></h2>
+        </div>
+
+        <div class="mobile-product-image">
+            <img id="mobile-product-img" src="" alt="Product Image">
+        </div>
+
+        <div class="mobile-product-details">
+            <div class="mobile-product-price" id="mobile-product-price"></div>
+            <div class="mobile-product-compare" id="mobile-product-compare"></div>
+        </div>
+
+        <div class="mobile-contact-section">
+            <h3>¿Le interesa comprarlo?</h3>
+            <p>Envíenos su info y lo llamaremos lo antes posible.</p>
+
+            <form id="mobile-contact-form">
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label for="mobile-name">Nombre</label>
+                    <input type="text" id="mobile-name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile-email">Email</label>
+                    <input type="email" id="mobile-email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile-phone">Teléfono</label>
+                    <input type="text" id="mobile-phone" name="phone" required>
+                </div>
+
+                <button type="submit" class="mobile-submit-btn">Enviar correo</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script src="https://www.google.com/recaptcha/api.js?render=@siteKey"></script>
+
+    <script>
+        /* ---------- reCAPTCHA: safe init ---------- */
+        var recaptchaToken = null;
+        function initRecaptcha(siteKey){
+          if (window.grecaptcha && grecaptcha.ready){
+            grecaptcha.ready(function(){
+              try {
+                grecaptcha.execute(siteKey, { action: 'contact' }).then(function(token){
+                  recaptchaToken = token;
+                });
+              } catch(e){ console.warn("reCAPTCHA error:", e); }
+            });
+          } else {
+            setTimeout(function(){ initRecaptcha(siteKey); }, 400);
+          }
+        }
+
+        /* ---------- jQuery UI dialog: init once + z-index fix ---------- */
+        function ensureDialogInit(){
+          if (!$.ui || !$.ui.dialog){
+            console.error("jQuery UI dialog not loaded (check _Layout includes).");
+            return false;
+          }
+          var $dlg = $("#modal_dialog");
+          if (!$dlg.data("ui-dialog")){
+            $dlg.dialog({
+              modal: true,
+              appendTo: "body",
+              autoOpen: false,
+              width: 300,
+              maxHeight: 540,
+              position: { my:"center", at:"center", of: window },
+              open: function(){ $("body").addClass("ui-dialog-open"); },
+              close: function(){
+                $("body").removeClass("ui-dialog-open");
+                const url = new URL(window.location.href);
+                url.searchParams.delete("itemId");
+                history.replaceState({}, "", url.pathname + (url.searchParams.toString() ? ("?"+url.searchParams.toString()) : ""));
+              }
+            });
+            $(".ui-widget-overlay").css("z-index", 10000);
+            $(".ui-dialog").css("z-index", 10001);
+          }
+          return true;
+        }
+
+        var selectedProduct = {};
+
+        function showDesktopModal(){
+          if (!ensureDialogInit()) return;
+
+          $("#contactinfodiv").show();
+          $("#contactinfolabel").text("¿Te interesa comprar? Escríbenos.");
+          $("#itemdetaildiv").show();
+
+          $("#name").text(selectedProduct.name);
+          $("#price").text(selectedProduct.price);
+          $("#prepayment").text(selectedProduct.prepayment || "");
+          $("#imageurl").attr("src", selectedProduct.imageUrl);
+
+          if ((selectedProduct.isvailablenow + "") === "True" || selectedProduct.isvailablenow === true){
+            $("#modal-title").text("Listo para recoger hoy");
+            $("#prepaymentlabel").css("visibility","hidden");
+          } else {
+            $("#modal-title").text("");
+            $("#prepaymentlabel").css("visibility","visible");
+          }
+
+          $("#modal_dialog").dialog("open");
+
+          // Deep-link: ?itemId=...
+          const url = new URL(window.location.href);
+          url.searchParams.set("itemId", selectedProduct.productId);
+          history.replaceState({}, "", url.pathname + "?" + url.searchParams.toString());
+        }
+
+        function showMobileProductPage(){
+          $(".mobile-banner").hide();
+          $("#mobile-product-img").attr("src", selectedProduct.imageUrl);
+          $("#mobile-product-name").text(selectedProduct.name);
+          $("#mobile-product-price").text("$" + selectedProduct.price);
+          $("#mobile-product-compare").text("Compare con Amazon a $" + (selectedProduct.amazonPrice || "90.00"));
+          $("#mobile-contact-form")[0].reset();
+          $("#mobile-product-page").addClass("slide-in");
+
+          const url = new URL(window.location.href);
+          url.searchParams.set("itemId", selectedProduct.productId);
+          history.replaceState({}, "", url.pathname + "?" + url.searchParams.toString());
+        }
+
+        $(function () {
+          initRecaptcha('@siteKey');
+          ensureDialogInit(); // once
+
+          // Item click -> hydrate + open (desktop/mobile)
+          $("#productsContainer").on("click", ".openProductModal", function(e){
+            e.preventDefault();
+            const $btn = $(this);
+            selectedProduct = {
+              productId: $btn.data("product-id"),
+              imageUrl: $btn.data("imageurl"),
+              price: $btn.data("price"),
+              name: $btn.data("name"),
+              prepayment: $btn.data("prepayment"),
+              isvailablenow: $btn.data("isvailablenow"),
+              amazonPrice: $btn.data("amazon-price") || "90.00"
+            };
+                   var isMobile =
+          /Android|iPhone|iPad|iPod|Opera Mini|IEMobile/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            showMobileProductPage();
+        } else {
+            showDesktopModal();
+        }
+          });
+
+          // Page-load deep link: ?itemId=123 -> open modal directly
+          (function openFromQuery(){
+            const params = new URLSearchParams(location.search);
+            const id = parseInt(params.get("itemId") || "0");
+            if (!id) return;
+            const $btn = $("[data-product-id='"+id+"']").first();
+            if ($btn.length){
+              selectedProduct = {
+                productId: id,
+                imageUrl: $btn.data("imageurl"),
+                price: $btn.data("price"),
+                name: $btn.data("name"),
+                prepayment: $btn.data("prepayment"),
+                isvailablenow: $btn.data("isvailablenow"),
+                amazonPrice: $btn.data("amazon-price") || "90.00"
+              };
+              if ($(window).width() <= 768) { showMobileProductPage(); }
+              else { showDesktopModal(); }
+            }
+          })();
+
+          // Close buttons
+          $(document).on("click", "#btnclose", function(e){
+            e.preventDefault();
+            $("#myForm")[0]?.reset();
+            $("#modal_dialog").dialog("close");
+          });
+          $("#btnback, #btnbackmobile").on("click", function(e){
+            const url = new URL(window.location.href);
+            console.log("back clicked");
+            console.log(url.origin);
+            window.location.href = url.origin;
+            // e.preventDefault();
+            // $("#myForm")[0]?.reset();
+            // $("#mobile-product-page").removeClass("slide-in");
+            // $(".mobile-banner").show();
+            // if ($("#modal_dialog").is(":ui-dialog")) $("#modal_dialog").dialog("close");
+          });
+
+          // Please-wait mini dialog
+          if (!$("#pleasewaitmodal").data("ui-dialog")){
+            $("#pleasewaitmodal").dialog({ autoOpen:false, modal:true, width:200, appendTo:"body" });
+          }
+
+          // Desktop submit
+          $("#myForm").on("submit", function(event){
+            event.preventDefault();
+            if (recaptchaToken === null){ alert("Por favor, espera..."); return; }
+            $.ajax({
+              type: "POST",
+              url: "/Index?handler=Send",
+              data: {
+                "productId": selectedProduct.productId,
+                "name": selectedProduct.name,
+                "imageUrl": selectedProduct.imageUrl,
+                "fullname": $("#fullname").val(),
+                "phone": $("#phone").val(),
+                "email": $("#email").val(),
+                "recaptchaResponse": recaptchaToken
+              },
+              beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val());
+                $("#pleasewaitmodal").dialog("open");
+              },
+              success: function () {
+                $("#modal-title").text("");
+                $("#itemdetaildiv, #contactinfodiv").hide();
+                $("#contactinfolabel").html("Gracias por su interés. <br><br>Nos estaremos comunicando con usted lo antes posible.");
+                $("#divbuttons").css("visibility", "hidden");
+                $("#lineseparator").hide();
+              },
+              complete: function(){ $("#pleasewaitmodal").dialog("close"); }
+            });
+          });
+
+          // Mobile submit
+                       // Mobile submit
+                $("#mobile-contact-form").on("submit", function(e){
+                  e.preventDefault();
+
+                  if (recaptchaToken === null){
+                    alert("Por favor, espera...");
+                    return;
+                  }
+
+                          var token = $('input[name="__RequestVerificationToken"]').val();
+        if (!token) {
+            token = $('#mobile-contact-form input[name="__RequestVerificationToken"]').val();
+        }
+
+
+        var data = {
+            productId: selectedProduct.productId,
+            name: selectedProduct.name, // اسم المنتج
+            imageUrl: selectedProduct.imageUrl,
+            fullName: $("#mobile-name").val(), // fullName (بـ N كبيتة)
+            email: $("#mobile-email").val(),
+            phone: $("#mobile-phone").val(),
+            recaptchaResponse: recaptchaToken // recaptchaResponse
+        };
+
+
+        var token = $('input[name="__RequestVerificationToken"]').val();
+
+        console.log("Sending data:", data);
+
+
+
+        // $.ajax({
+        //     type: "POST",
+        //     url: "/Index?handler=Send",
+        //     headers: {
+        //         "RequestVerificationToken": token
+        //     },
+        //     data: JSON.stringify(data), // إرسال كـ JSON
+            $.ajax({
+        url: '/Index?handler=SendJson',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            productId: selectedProduct.productId,
+            name: selectedProduct.name,
+            imageUrl: selectedProduct.imageUrl,
+            fullName: $("#mobile-name").val(),
+            email: $("#mobile-email").val(),
+            phone: $("#mobile-phone").val(),
+            recaptchaResponse: recaptchaToken
+        }),
+
+                    success: function(){
+                      $(".mobile-contact-section").html(
+                        '<div style="text-align:center;padding:40px 20px;">' +
+                        '<h3 style="color:#2A8703;margin-bottom:20px;">¡Gracias por su interés!</h3>' +
+                        '<p style="color:#666;font-size:16px;">Nos estaremos comunicando con usted lo antes posible.</p>' +
+                        '</div>'
+                      );
+                    },
+        error: function(xhr, status, error) {
+            console.error("Error:", xhr.responseText);
+            alert("Error al enviar el formulario. Por favor, intente de nuevo.");
+        }
+                  });
+                }); // ✅ CLOSE mobile submit
+
+        }); // ✅ CLOSE $(function)
+
+        function currentSlide(n, imageUrl, productId) {
+            var img = document.getElementById(productId);
+            img.src = imageUrl;
+        }
+
+    </script>
+}

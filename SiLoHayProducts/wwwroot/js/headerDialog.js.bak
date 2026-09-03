@@ -1,0 +1,228 @@
+﻿// ---------------------------
+// Email validation
+// ---------------------------
+function isValidEmail(email) {
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// ---------------------------
+// Show validation errors
+// ---------------------------
+function showValidationErrors(errors) {
+    $(".field-validation-error").text("");
+    $(".input-validation-error").removeClass("input-validation-error");
+    $("#validationSummary").hide().empty();
+
+    if (errors.length > 0) {
+        var errorList = $("<ul>");
+        errors.forEach(function (error) {
+            errorList.append($("<li>").text(error));
+        });
+        $("#validationSummary").html(errorList).show();
+
+        $("#validationSummary")[0].scrollIntoView({
+            behavior: "smooth",
+            block: "nearest"
+        });
+    }
+
+    $("#headerInfoDialog").dialog("option", "height", "auto");
+}
+
+// ---------------------------
+// Validate + Trigger reCAPTCHA then AJAX submit
+// ---------------------------
+function submitHeaderForm() {
+    $(".field-validation-error").text("");
+    $(".input-validation-error").removeClass("input-validation-error");
+    $("#validationSummary").hide().empty();
+
+    var full = $("#hdrFullname").val().trim();
+    var email = $("#hdrEmail").val().trim();
+    var phone = $("#hdrPhone").val().trim();
+    var item = $("#hdrItem").val().trim();
+
+    var errors = [];
+
+    if (!full) {
+        errors.push("Nombre requerido.");
+        $("#hdrFullname").addClass("input-validation-error");
+    }
+
+    if (!email) {
+        errors.push("Correo electrónico requerido.");
+        $("#hdrEmail").addClass("input-validation-error");
+    } else if (!isValidEmail(email)) {
+        errors.push("Correo electrónico inválido.");
+        $("#hdrEmail").addClass("input-validation-error");
+    }
+
+    if (!phone) {
+        errors.push("Teléfono requerido.");
+        $("#hdrPhone").addClass("input-validation-error");
+    }
+
+    if (!item) {
+        errors.push("Item requerido.");
+        $("#hdrItem").addClass("input-validation-error");
+    }
+
+    if (errors.length > 0) {
+        showValidationErrors(errors);
+        return false;
+    }
+
+    grecaptcha.ready(function () {
+        grecaptcha.execute("6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI", { action: "submit" })
+            .then(function (token) {
+                $("#captchaInput").val(token);
+                sendHeaderAjax();
+            });
+    });
+
+    return false;
+}
+
+// ---------------------------
+// AJAX Submit
+// ---------------------------
+function sendHeaderAjax() {
+    $("#hdrBtnSend").prop("disabled", true).text("Enviando...");
+
+    $.ajax({
+        url: $("#headerForm").attr("action"),
+        type: "POST",
+        data: $("#headerForm").serialize(),
+        success: function (response) {
+
+            try {
+                var res = typeof response === "string" ? JSON.parse(response) : response;
+
+                if (res.success) {
+
+                    $("#headerInfoDialog .modal-content").html(`
+                        <div style="text-align:center;padding:40px 20px;">
+                            <h3 style="color:#2A8703;font-size:20px;margin-bottom:15px;">
+                                ¡Gracias por su interés!
+                            </h3>
+                            <p style="font-size:15px;color:#444;">
+                                Nos estaremos comunicando lo antes posible.
+                            </p>
+
+                            <button id="closeSuccessBtn"
+                                style="
+                                    margin-top:25px;
+                                    padding:10px 20px;
+                                    background:#007bff;
+                                    border:none;
+                                    color:#fff;
+                                    border-radius:4px;
+                                    cursor:pointer;
+                                    font-size:16px;">
+                                Cerrar
+                            </button>
+                        </div>
+                    `);
+
+                    $("#headerInfoDialog").dialog("option", "height", "auto");
+                } else {
+                    $("#hdrBtnSend").prop("disabled", false).text("Enviar correo");
+                    showValidationErrors([res.message || "Error al enviar el formulario."]);
+                }
+            }
+            catch (e) {
+                $("#headerInfoDialog .modal-content").html(`
+                    <div style="text-align:center;padding:40px 20px;">
+                        <h3 style="color:#2A8703;">¡Gracias por su interés!</h3>
+                        <p>Nos estaremos comunicando lo antes posible.</p>
+                    </div>
+                `);
+            }
+        },
+
+        error: function (xhr, status, error) {
+            alert("Hubo un error enviando el formulario: " + error);
+            $("#hdrBtnSend").prop("disabled", false).text("Enviar correo");
+        }
+    });
+}
+
+// ---------------------------
+// Initialize Dialog
+// ---------------------------
+function initHeaderDialog() {
+
+    var $dlg = $("#headerInfoDialog");
+
+    $dlg.dialog({
+        modal: true,
+        autoOpen: false,
+        width: 420,
+        height: "auto",
+        appendTo: "body",
+        open: function () { resetForm(); },
+        close: function () { resetForm(); }
+    });
+
+    function resetForm() {
+        $("#headerForm")[0].reset();
+        $(".field-validation-error").text("");
+        $(".input-validation-error").removeClass("input-validation-error");
+        $("#validationSummary").hide().empty();
+        $("#hdrBtnSend").prop("disabled", false).text("Enviar correo");
+    }
+
+    // OPEN dialog
+    $(document).on("click", "#emailLink", function (e) {
+        e.preventDefault();
+        $("#headerInfoDialog").dialog("open");
+    });
+
+    // CLOSE form dialog
+    $(document).on("click", "#hdrBtnClose", function () {
+        $("#headerInfoDialog").dialog("close");
+    });
+
+    // CLOSE success screen
+    $(document).on("click", "#closeSuccessBtn", function () {
+        $("#headerInfoDialog").dialog("close");
+    });
+
+    // SUBMIT
+    $(document).on("click", "#hdrBtnSend", function (e) {
+        e.preventDefault();
+        submitHeaderForm();
+    });
+
+    // Live validation
+    $(document).on("blur", "#hdrEmail", function () {
+        var email = $(this).val().trim();
+        if (email && !isValidEmail(email)) {
+            $(this).addClass("input-validation-error");
+            $("[data-valmsg-for='email']").text("Email inválido");
+        }
+    });
+
+    $(document).on("input", "#hdrFullname,#hdrEmail,#hdrPhone,#hdrItem", function () {
+        $(this).removeClass("input-validation-error");
+        var fieldName = $(this).attr("name");
+        if (fieldName) {
+            $("[data-valmsg-for='" + fieldName + "']").text("");
+        }
+        $("#validationSummary").hide().empty();
+    });
+
+    $(document).on("input", "#hdrPhone", function () {
+        this.value = this.value.replace(/[^0-9]/g, "");
+    });
+}
+
+// ---------------------------
+// Document Ready
+// ---------------------------
+$(document).ready(function () {
+    if ($("#headerInfoDialog").length > 0) {
+        initHeaderDialog();
+    }
+});

@@ -1,0 +1,22 @@
+﻿@page
+@model SiLoHayProducts.Pages.AddProductsModel
+@{
+}
+<form method="POST">
+    <table>
+        <tr><td>ImageUrl</td><td><input type="text" size="60" asp-for="ImageUrl"></td></tr>
+        <tr><td>ProductName</td><td><input type="text" size="60" asp-for="ProductName"></td></tr>
+        <tr><td>ASIN</td><td><input type="text" size="10" asp-for="ASIN"></td></tr>
+        <tr><td>AmazonPriceNew</td><td><input type="text" size="10" asp-for="AmazonPriceNew"></td></tr>
+        <tr><td>AmazonPriceUsed</td><td><input type="text" size="10" asp-for="AmazonPriceUsed"></td></tr>
+        <tr><td>Price</td><td><input type="text" size="10" asp-for="Price"></td></tr>
+        <tr><td>IsAvailable</td><td><input type="text" size="3" value="True" asp-for="IsAvailable"></td></tr>
+        <tr><td>AmazonLink</td><td><input type="text" size="60" asp-for="AmazonLink"></td></tr>
+        <tr><td>LinkCustomerCompare</td><td><input type="text" size="60" asp-for="LinkCustomerCompare"></td></tr>
+        <tr><td>Available Now?</td><td><input type="text" size="3" value="True" asp-for="IsAvailableNow"></td></tr>
+        <tr><td>Prepayment</td><td><input type="text" size="3" asp-for="Prepayment"></td></tr>
+
+    </table>
+
+    <input type="submit" />
+</form>

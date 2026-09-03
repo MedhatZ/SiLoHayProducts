@@ -1,0 +1,81 @@
+﻿@* _CookieConsentModal.cshtml *@
+@{
+    Layout = null;
+}
+
+<div id="cookieConsentModal" class="cookie-consent-modal">
+    <div class="cookie-consent-content">
+        <p class="cookie-text">Utilizamos cookies para mejorar su experiencia de navegación. Al hacer clic en "Aceptar", acepta nuestro uso de cookies.</p>
+        <button id="acceptCookies" class="btn btn-primary">Aceptar</button>
+    </div>
+</div>
+
+<style>
+    .cookie-consent-modal {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: black; /* Background color changed to red */
+        color: white;
+        padding: 10px;
+        z-index: 9999;
+    }
+
+    .cookie-consent-content {
+        max-width: 100%; /* Remove the max width to avoid unnecessary space */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: space-between; /* Ensures text and button are aligned properly */
+        align-items: center; /* Centers vertically */
+    }
+
+    .cookie-text {
+        margin: 0;
+        padding: 0;
+        text-align: left; /* Text aligned to left */
+        flex-grow: 1; /* Allows the text to take available space */
+    }
+
+    .cookie-consent-modal button {
+        margin-top: 0;
+        text-align: right; /* Button aligned to right */
+        padding: 5px 15px; /* Button padding adjusted */
+    }
+</style>
+
+<script>
+    window.onload = function () {
+        if (!getCookie("cookiesAccepted") && !getCookie("cookiesRejected")) {
+            document.getElementById("cookieConsentModal").style.display = "block";
+        }
+
+        document.getElementById("acceptCookies").onclick = function () {
+            setCookie("cookiesAccepted", "true", 365);
+            document.getElementById("cookieConsentModal").style.display = "none";
+        };
+    };
+
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+</script>

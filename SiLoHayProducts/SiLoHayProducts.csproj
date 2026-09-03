@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\bak\**" />
+    <Compile Remove="Pages\Shared\bak\**" />
+    <Content Remove="Pages\bak\**" />
+    <Content Remove="Pages\Shared\bak\**" />
+    <EmbeddedResource Remove="Pages\bak\**" />
+    <EmbeddedResource Remove="Pages\Shared\bak\**" />
+    <None Remove="Pages\bak\**" />
+    <None Remove="Pages\Shared\bak\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\AddProducts.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\AddProducts.cshtml" />
+    <Content Remove="wwwroot\js\Index.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="microsoft-web-helpers" Version="2.1.20710.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+  </ItemGroup>
+</Project>
