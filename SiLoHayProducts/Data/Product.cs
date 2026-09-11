@@ -59,6 +59,54 @@ namespace SiLoHayProductsNew.Data
             return productsList;
         }
 
+        public Product? GetById(string SiLoHayConnString, int productId)
+        {
+            using var sqlConn = new SqlConnection(SiLoHayConnString);
+            sqlConn.Open();
+
+            const string sqlQuery = @"
+SELECT TOP 1
+    SiLoHayProductId,
+    ProductName,
+    OurPrice,
+    ImageUrl,
+    ImageUrl2,
+    linkCustomerCompare,
+    PriceNew,
+    IsAvailableNow,
+    Prepayment,
+    StoreUsedForComparison,
+    ShowComparisonMsg,
+    IsAvailable
+FROM dbo.SiLoHayProduct
+WHERE SiLoHayProductId = @ProductId;";
+
+            using var cmd = new SqlCommand(sqlQuery, sqlConn);
+            cmd.Parameters.AddWithValue("@ProductId", productId);
+
+            using var reader = cmd.ExecuteReader();
+            if (!reader.Read())
+            {
+                return null;
+            }
+
+            return new Product
+            {
+                ProductId = (int)reader["SiLoHayProductId"],
+                ProductName = reader["ProductName"].ToString(),
+                Price = (decimal)reader["OurPrice"],
+                ImageUrl = reader["ImageUrl"]?.ToString(),
+                ImageUrl2 = reader["ImageUrl2"] == DBNull.Value ? null : reader["ImageUrl2"].ToString(),
+                LinkCustomerCompare = reader["linkCustomerCompare"] == DBNull.Value ? null : reader["linkCustomerCompare"].ToString(),
+                PriceNew = reader["PriceNew"] == DBNull.Value ? 0 : (decimal)reader["PriceNew"],
+                IsAvailableNow = reader["IsAvailableNow"] != DBNull.Value && (bool)reader["IsAvailableNow"],
+                Prepayment = reader["Prepayment"] == DBNull.Value ? null : (decimal?)reader["Prepayment"],
+                StoreUsedForComparison = reader["StoreUsedForComparison"] == DBNull.Value ? null : reader["StoreUsedForComparison"].ToString(),
+                ShowComparisonMsg = reader["ShowComparisonMsg"] != DBNull.Value && (bool)reader["ShowComparisonMsg"],
+                IsAvailable = reader["IsAvailable"] != DBNull.Value && (bool)reader["IsAvailable"]
+            };
+        }
+
         /* Add() is to add add products in AddProduct.csjtml */
         public bool Add(string SiLoHayConnString)
         {

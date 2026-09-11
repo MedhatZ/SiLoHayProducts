@@ -138,7 +138,7 @@
 <div id="modal_dialog" style="display: none">
     <form id="myForm">
         @Html.AntiForgeryToken()
-        <div class="modal-content">
+        <div class="modal-content product-checkout-modal">
             <!-- Mobile Modal Header -->
             <div class="mobile-modal-header">
                 <button id="btnback" type="button" style="padding:0;border:none;background:none">
@@ -149,66 +149,64 @@
             </div>
 
             <!-- Desktop Modal Header -->
-            <div class="desktop-modal-header">
-                <table style="width:100%">
-                    <tr>
-                        <td><span style="font-weight:bold;font-size:13pt;color:royalblue" id="modal-title"></span></td>
-                        <td style="text-align:right">
-                            <button id="btnclose" type="reset" style="padding:0;border:none;background:none" value="Submit">
-                                <img src="~/images/close.png">
-                            </button>
-                        </td>
-                    </tr>
-                </table>
+            <div class="desktop-modal-header product-modal-header">
+                <span id="modal-title" class="product-modal-title"></span>
+                <button id="btnclose" type="button" class="product-modal-close" aria-label="Cerrar">
+                    <img src="~/images/close.png" alt="Cerrar">
+                </button>
             </div>
             <div class="modal-body" data-table="table" data-id=""></div>
         </div>
 
-        <div id="itemdetaildiv">
-            <div id="wrapper">
+        <div id="itemdetaildiv" class="product-modal-details">
+            <div id="wrapper" class="product-modal-media">
                 <div class="divimagemodal">
-                    <img class="imgproductModal" id='imageurl'>
+                    <img class="imgproductModal" id="imageurl" alt="Producto">
                 </div>
-                <div class="divproductname"><span id="name"></span></div>
+                <div class="divproductname product-modal-name"><span id="name"></span></div>
             </div>
-            <div class="productprice">
-                <span style="width:90%" id="pricetag">$</span><span id="price"></span>
-                <label id="prepaymentlabel"
-                       style="color:black;padding:5px;font-family:Calibri;font-size:12pt;font-weight:normal"
-                       for="pricetag">
+            <div class="productprice product-modal-price">
+                <span id="pricetag">$</span><span id="price"></span>
+                <label id="prepaymentlabel" class="product-modal-prepay" for="pricetag">
                     (Pago inicial de $<span id="prepayment"></span>)
-                </label><br>
+                </label>
             </div>
         </div>
 
-        <hr id="lineseparator" style="border-top:3px solid #bbb;">
-        <label id="contactinfolabel">¿Te interesa?</label>
+        <hr id="lineseparator" class="product-modal-divider">
 
-        <div id="contactinfodiv" style="padding-top:5px;width:100%;">
-            <table>
-                <tr>
-                    <td><label class="contactlabels" for="fullname">Nombre</label></td>
-                    <td><input style="width:100%" id="fullname" type="text" name="fullname" data-val="true" data-val-required="*"></td>
-                    <td><span style="font-size:smaller;color:red" data-valmsg-for="fullname" data-valmsg-replace="true"></span></td>
-                </tr>
-                <tr>
-                    <td><label class="contactlabels" for="email">Email</label></td>
-                    <td><input id="email" type="email" name="email" data-val="true" data-val-email="inválido" data-val-required="*"></td>
-                    <td><span style="font-size:smaller;color:red" data-valmsg-for="email" data-valmsg-replace="true"></span></td>
-                </tr>
-                <tr>
-                    <td><label class="contactlabels" for="phone">Teléfono</label></td>
-                    <td><input id="phone" type="text" name="phone" data-val="true" data-val-required="*"></td>
-                    <td><span style="font-size:smaller;color:red" data-valmsg-for="phone" data-valmsg-replace="true"></span></td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <div id="divbuttons">
-                            <button id="btnconfirm" class="button" type="submit">Enviar correo</button>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+        <div id="payNowSection" class="product-modal-pay">
+            <button id="btnpay" class="btn-pay-stripe" type="button">
+                Pagar ahora con Stripe
+            </button>
+            <p class="product-modal-pay-hint">
+                Lo lleva al pago seguro (tarjeta / Klarna según el producto).
+            </p>
+        </div>
+
+        <div class="product-modal-contact-block">
+            <label id="contactinfolabel" class="product-modal-contact-title">¿Prefiere que lo contactemos?</label>
+
+            <div id="contactinfodiv" class="product-modal-contact-form">
+                <div class="product-field">
+                    <label class="contactlabels" for="fullname">Nombre</label>
+                    <input id="fullname" type="text" name="fullname" data-val="true" data-val-required="*" autocomplete="name">
+                    <span class="field-error" data-valmsg-for="fullname" data-valmsg-replace="true"></span>
+                </div>
+                <div class="product-field">
+                    <label class="contactlabels" for="email">Email</label>
+                    <input id="email" type="email" name="email" data-val="true" data-val-email="inválido" data-val-required="*" autocomplete="email">
+                    <span class="field-error" data-valmsg-for="email" data-valmsg-replace="true"></span>
+                </div>
+                <div class="product-field">
+                    <label class="contactlabels" for="phone">Teléfono</label>
+                    <input id="phone" type="text" name="phone" data-val="true" data-val-required="*" autocomplete="tel">
+                    <span class="field-error" data-valmsg-for="phone" data-valmsg-replace="true"></span>
+                </div>
+                <div id="divbuttons" class="product-modal-email-actions">
+                    <button id="btnconfirm" class="btn-send-email" type="submit">Solo enviar correo</button>
+                </div>
+            </div>
         </div>
     </form>
 </div>
@@ -247,7 +245,13 @@
         </div>
 
         <div class="mobile-contact-section">
-            <h3>¿Le interesa comprarlo?</h3>
+            <button type="button" id="mobile-pay-btn" class="mobile-submit-btn"
+                    style="background:#2A8703;margin-bottom:16px;width:100%;font-weight:bold;">
+                Pagar ahora con Stripe
+            </button>
+            <p style="font-size:13px;color:#555;margin-bottom:20px;">Pago seguro. No necesita llenar el formulario de abajo.</p>
+
+            <h3>¿Prefiere que lo contactemos?</h3>
             <p>Envíenos su info y lo llamaremos lo antes posible.</p>
 
             <form id="mobile-contact-form">
@@ -267,7 +271,7 @@
                     <input type="text" id="mobile-phone" name="phone" required>
                 </div>
 
-                <button type="submit" class="mobile-submit-btn">Enviar correo</button>
+                <button type="submit" class="mobile-submit-btn" style="background:#666;">Solo enviar correo</button>
             </form>
         </div>
     </div>
@@ -302,14 +306,37 @@
           }
           var $dlg = $("#modal_dialog");
           if (!$dlg.data("ui-dialog")){
+            var maxH = Math.max(320, Math.min(720, window.innerHeight - 32));
             $dlg.dialog({
               modal: true,
               appendTo: "body",
               autoOpen: false,
-              width: 300,
-              maxHeight: 540,
+              width: 400,
+              maxHeight: maxH,
+              resizable: false,
+              draggable: true,
               position: { my:"center", at:"center", of: window },
-              open: function(){ $("body").addClass("ui-dialog-open"); },
+              open: function(){
+                $("body").addClass("ui-dialog-open");
+                var h = Math.max(320, Math.min(720, window.innerHeight - 32));
+                var $content = $(this);
+                var $wrap = $content.closest(".ui-dialog");
+                $wrap.css({
+                  "z-index": 10001,
+                  "border-radius": "10px",
+                  "overflow": "hidden",
+                  "padding": "0",
+                  "border": "1px solid #ddd",
+                  "max-height": h + "px"
+                });
+                $content.css({
+                  "max-height": h + "px",
+                  "overflow-y": "auto",
+                  "overflow-x": "hidden",
+                  "padding": "0"
+                });
+                $dlg.dialog("option", "position", { my:"center", at:"center", of: window });
+              },
               close: function(){
                 $("body").removeClass("ui-dialog-open");
                 const url = new URL(window.location.href);
@@ -318,7 +345,6 @@
               }
             });
             $(".ui-widget-overlay").css("z-index", 10000);
-            $(".ui-dialog").css("z-index", 10001);
           }
           return true;
         }
@@ -329,8 +355,10 @@
           if (!ensureDialogInit()) return;
 
           $("#contactinfodiv").show();
-          $("#contactinfolabel").text("¿Te interesa comprar? Escríbenos.");
+          $("#payNowSection").show();
+          $("#contactinfolabel").text("¿Prefiere que lo contactemos?");
           $("#itemdetaildiv").show();
+          $("#divbuttons").css("visibility", "visible");
 
           $("#name").text(selectedProduct.name);
           $("#price").text(selectedProduct.price);
@@ -339,13 +367,15 @@
 
           if ((selectedProduct.isvailablenow + "") === "True" || selectedProduct.isvailablenow === true){
             $("#modal-title").text("Listo para recoger hoy");
-            $("#prepaymentlabel").css("visibility","hidden");
+            $("#prepaymentlabel").removeClass("is-visible").hide();
           } else {
             $("#modal-title").text("");
-            $("#prepaymentlabel").css("visibility","visible");
+            $("#prepaymentlabel").addClass("is-visible").show();
           }
 
           $("#modal_dialog").dialog("open");
+          // Scroll to top so pay button is visible first
+          $("#modal_dialog").scrollTop(0);
 
           // Deep-link: ?itemId=...
           const url = new URL(window.location.href);
@@ -438,6 +468,36 @@
             $("#pleasewaitmodal").dialog({ autoOpen:false, modal:true, width:200, appendTo:"body" });
           }
 
+          function startCheckout(productId){
+            if (!productId){
+              alert("Producto inválido.");
+              return;
+            }
+            var form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/Checkout";
+            var token = $('input:hidden[name="__RequestVerificationToken"]').first().val();
+            if (token){
+              var t = document.createElement("input");
+              t.type = "hidden";
+              t.name = "__RequestVerificationToken";
+              t.value = token;
+              form.appendChild(t);
+            }
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "ProductId";
+            input.value = productId;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+          }
+
+          $(document).on("click", "#btnpay, #mobile-pay-btn", function(e){
+            e.preventDefault();
+            startCheckout(selectedProduct.productId);
+          });
+
           // Desktop submit
           $("#myForm").on("submit", function(event){
             event.preventDefault();
@@ -460,7 +520,7 @@
               },
               success: function () {
                 $("#modal-title").text("");
-                $("#itemdetaildiv, #contactinfodiv").hide();
+                $("#itemdetaildiv, #contactinfodiv, #payNowSection").hide();
                 $("#contactinfolabel").html("Gracias por su interés. <br><br>Nos estaremos comunicando con usted lo antes posible.");
                 $("#divbuttons").css("visibility", "hidden");
                 $("#lineseparator").hide();

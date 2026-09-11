@@ -109,6 +109,222 @@ body.mobile-page-open {
     padding: 0px;
 }
 
+/* ===== Product checkout popup polish ===== */
+#modal_dialog .product-checkout-modal,
+#modal_dialog form#myForm {
+    box-sizing: border-box;
+}
+
+#modal_dialog .product-modal-header {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px !important;
+    background: #f7f8fa !important;
+    border-bottom: 1px solid #e6e8eb !important;
+}
+
+#modal_dialog .product-modal-title {
+    font-weight: 700;
+    font-size: 13px;
+    color: #1a56db;
+    line-height: 1.3;
+}
+
+#modal_dialog .product-modal-close {
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    line-height: 0;
+    flex: 0 0 auto;
+}
+
+#modal_dialog .product-modal-close img {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+#modal_dialog .product-modal-details {
+    padding: 8px 16px 4px;
+}
+
+#modal_dialog .product-modal-media {
+    width: 100%;
+    overflow: hidden;
+}
+
+#modal_dialog .divimagemodal {
+    padding: 0 0 4px;
+}
+
+#modal_dialog .imgproductModal {
+    width: 110px !important;
+    height: 110px !important;
+    object-fit: contain;
+}
+
+#modal_dialog .product-modal-name {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+    padding: 2px 4px 0;
+    -webkit-line-clamp: 2;
+    margin: 0;
+}
+
+#modal_dialog .product-modal-price {
+    text-align: center;
+    padding: 4px 0 0 !important;
+    font-size: 17px;
+    color: #2A8703;
+}
+
+#modal_dialog .product-modal-prepay {
+    display: none;
+    margin-top: 2px;
+    color: #444;
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#modal_dialog .product-modal-prepay.is-visible {
+    display: block;
+}
+
+#modal_dialog .product-modal-divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 8px 16px;
+}
+
+#modal_dialog .product-modal-pay {
+    padding: 0 16px 8px;
+    text-align: center;
+}
+
+#modal_dialog .btn-pay-stripe {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 16px;
+    background: #2A8703;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#modal_dialog .btn-pay-stripe:hover {
+    background: #246f03;
+}
+
+#modal_dialog .product-modal-pay-hint {
+    margin: 6px 0 0;
+    font-size: 11px;
+    color: #666;
+    line-height: 1.3;
+}
+
+#modal_dialog .product-modal-contact-block {
+    padding: 0 16px 16px;
+}
+
+#modal_dialog .product-modal-contact-title,
+#modal_dialog #contactinfolabel {
+    display: block;
+    font-family: verdana, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #222;
+    text-align: left;
+    padding: 0 0 8px !important;
+    margin: 0;
+}
+
+#modal_dialog #contactinfodiv,
+#modal_dialog #contactinfodiv.product-modal-contact-form,
+#modal_dialog .product-modal-contact-form {
+    padding: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 12px;
+}
+
+#modal_dialog .product-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 8px;
+}
+
+#modal_dialog .product-field .contactlabels {
+    font-size: 12px;
+    color: #444;
+    font-weight: 600;
+}
+
+#modal_dialog .product-field input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border: 1px solid #cfd5dc;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fff;
+}
+
+#modal_dialog .product-field input:focus {
+    outline: none;
+    border-color: #2A8703;
+    box-shadow: 0 0 0 2px rgba(42, 135, 3, 0.15);
+}
+
+#modal_dialog .product-field .field-error {
+    min-height: 0;
+    font-size: 11px;
+    color: #c62828;
+}
+
+#modal_dialog .product-modal-email-actions {
+    margin-top: 2px;
+    padding-bottom: 4px;
+}
+
+#modal_dialog .btn-send-email,
+#modal_dialog #btnconfirm {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 10px 16px;
+    background: #5f6368 !important;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: block;
+}
+
+#modal_dialog .btn-send-email:hover,
+#modal_dialog #btnconfirm:hover {
+    background: #4a4e52 !important;
+}
+
+#modal_dialog .modal-body:empty {
+    display: none !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
 /* Ensure modal dialog header is always visible */
 .ui-dialog {
     z-index: 10001 !important; /* Higher than fixed header (1000) */
@@ -121,7 +337,25 @@ body.mobile-page-open {
 
 .ui-dialog .ui-dialog-content {
     padding: 0 !important;
+}
+
+/* Default dialog content can be visible; product modal overrides below */
+.ui-dialog .ui-dialog-content:not(#modal_dialog) {
     overflow: visible !important;
+}
+
+/* Product checkout dialog: must scroll — previous overflow:visible clipped the form */
+.ui-dialog:has(#modal_dialog) {
+    overflow: hidden !important;
+    max-height: calc(100vh - 24px) !important;
+}
+
+.ui-dialog:has(#modal_dialog) .ui-dialog-content,
+#modal_dialog.ui-dialog-content {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    max-height: calc(100vh - 24px) !important;
+    box-sizing: border-box !important;
 }
 
 /* Hide jQuery UI dialog titlebar completely */

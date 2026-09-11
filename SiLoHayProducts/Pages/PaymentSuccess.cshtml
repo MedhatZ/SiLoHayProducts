@@ -1,0 +1,23 @@
+@page
+@model SiLoHayProductsNew.Pages.PaymentSuccessModel
+@{
+    ViewData["Title"] = "Pago recibido";
+}
+
+<div style="max-width:520px;margin:40px auto;padding:20px;font-family:Arial,sans-serif;text-align:center;">
+    <h2 style="color:#2A8703;">¡Gracias!</h2>
+    @if (Model.PaymentConfirmed)
+    {
+        <p>Su pago fue confirmado correctamente.</p>
+    }
+    else
+    {
+        <p>Recibimos su solicitud de pago. La confirmación final se procesa de forma segura con Stripe.</p>
+        <p style="color:#666;font-size:14px;">Si usó un método de pago diferido (por ejemplo Klarna), la confirmación puede tardar un poco.</p>
+    }
+    @if (!string.IsNullOrEmpty(Model.SessionId))
+    {
+        <p style="font-size:12px;color:#999;">Referencia: @Model.SessionId</p>
+    }
+    <p style="margin-top:24px;"><a asp-page="/Index">Volver al catálogo</a></p>
+</div>

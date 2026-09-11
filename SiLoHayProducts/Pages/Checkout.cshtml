@@ -1,0 +1,18 @@
+@page
+@model SiLoHayProductsNew.Pages.CheckoutModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div style="max-width:480px;margin:40px auto;padding:20px;font-family:Arial,sans-serif;">
+    <h2>Checkout</h2>
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <p style="color:#b00020;">@Model.ErrorMessage</p>
+        <p><a asp-page="/Index">Volver al catálogo</a></p>
+    }
+    else
+    {
+        <p>Preparando pago…</p>
+    }
+</div>

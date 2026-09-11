@@ -1,81 +1,133 @@
-﻿@* _CookieConsentModal.cshtml *@
-@{
-    Layout = null;
-}
-
-<div id="cookieConsentModal" class="cookie-consent-modal">
+﻿@* Cookie consent banner partial — included from _Layout *@
+<div id="cookieConsentModal" class="cookie-consent-modal" style="display:none;" role="dialog" aria-live="polite">
     <div class="cookie-consent-content">
         <p class="cookie-text">Utilizamos cookies para mejorar su experiencia de navegación. Al hacer clic en "Aceptar", acepta nuestro uso de cookies.</p>
-        <button id="acceptCookies" class="btn btn-primary">Aceptar</button>
+        <div class="cookie-consent-actions">
+            <button type="button" id="rejectCookies" class="btn-cookie-secondary">Rechazar</button>
+            <button type="button" id="acceptCookies" class="btn-cookie-primary">Aceptar</button>
+        </div>
     </div>
 </div>
 
 <style>
     .cookie-consent-modal {
-        display: none;
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        background-color: black; /* Background color changed to red */
-        color: white;
-        padding: 10px;
-        z-index: 9999;
+        background-color: #111;
+        color: #fff;
+        padding: 12px 16px;
+        z-index: 10050;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.25);
     }
 
     .cookie-consent-content {
-        max-width: 100%; /* Remove the max width to avoid unnecessary space */
-        margin: 0;
-        padding: 0;
+        max-width: 1100px;
+        margin: 0 auto;
         display: flex;
-        justify-content: space-between; /* Ensures text and button are aligned properly */
-        align-items: center; /* Centers vertically */
+        gap: 16px;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
     }
 
     .cookie-text {
         margin: 0;
         padding: 0;
-        text-align: left; /* Text aligned to left */
-        flex-grow: 1; /* Allows the text to take available space */
+        text-align: left;
+        flex: 1 1 280px;
+        font-size: 14px;
+        line-height: 1.4;
     }
 
-    .cookie-consent-modal button {
-        margin-top: 0;
-        text-align: right; /* Button aligned to right */
-        padding: 5px 15px; /* Button padding adjusted */
+    .cookie-consent-actions {
+        display: flex;
+        gap: 8px;
+        flex: 0 0 auto;
+    }
+
+    .btn-cookie-primary,
+    .btn-cookie-secondary {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn-cookie-primary {
+        background: #2A8703;
+        color: #fff;
+    }
+
+    .btn-cookie-secondary {
+        background: transparent;
+        color: #fff;
+        border: 1px solid #aaa;
     }
 </style>
 
 <script>
-    window.onload = function () {
-        if (!getCookie("cookiesAccepted") && !getCookie("cookiesRejected")) {
-            document.getElementById("cookieConsentModal").style.display = "block";
+    (function () {
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
         }
 
-        document.getElementById("acceptCookies").onclick = function () {
-            setCookie("cookiesAccepted", "true", 365);
-            document.getElementById("cookieConsentModal").style.display = "none";
-        };
-    };
-
-    function setCookie(name, value, days) {
-        var expires = "";
-        if (days) {
-            var date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length);
+            }
+            return null;
         }
-        document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
 
-    function getCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        function hideBanner() {
+            var el = document.getElementById("cookieConsentModal");
+            if (el) el.style.display = "none";
         }
-        return null;
-    }
+
+        function showBanner() {
+            var el = document.getElementById("cookieConsentModal");
+            if (el) el.style.display = "block";
+        }
+
+        function initCookieConsent() {
+            if (!getCookie("cookiesAccepted") && !getCookie("cookiesRejected")) {
+                showBanner();
+            }
+
+            var accept = document.getElementById("acceptCookies");
+            var reject = document.getElementById("rejectCookies");
+
+            if (accept) {
+                accept.addEventListener("click", function () {
+                    setCookie("cookiesAccepted", "true", 365);
+                    hideBanner();
+                });
+            }
+
+            if (reject) {
+                reject.addEventListener("click", function () {
+                    setCookie("cookiesRejected", "true", 365);
+                    hideBanner();
+                });
+            }
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initCookieConsent);
+        } else {
+            initCookieConsent();
+        }
+    })();
 </script>

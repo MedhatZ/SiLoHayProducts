@@ -1,0 +1,90 @@
+@page
+@model SiLoHayProductsNew.Pages.Staff.GeneratePaymentLinkModel
+@{
+    ViewData["Title"] = "Generar enlace de pago";
+}
+
+<div style="max-width:720px;margin:30px auto;padding:20px;font-family:Arial,sans-serif;">
+    <h2>Generar enlace de pago (WhatsApp / SMS)</h2>
+
+    @if (!Model.IsAuthorized)
+    {
+        <p style="color:#b00020;">@Model.ErrorMessage</p>
+        <p>Abra esta página con <code>?key=SU_CLAVE</code> configurada en <code>Stripe:StaffAccessKey</code>.</p>
+    }
+    else
+    {
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <p style="color:#b00020;">@Model.ErrorMessage</p>
+    }
+
+    <form method="post" style="margin-bottom:28px;border:1px solid #ddd;padding:16px;">
+        <input type="hidden" name="Key" value="@Model.Key" />
+        <div style="margin-bottom:12px;">
+            <label>
+                <input type="radio" name="Mode" value="product" @(Model.Mode != "remaining" ? "checked" : null) />
+                Nuevo pago (producto → full o depósito según IsAvailableNow)
+            </label>
+        </div>
+        <div style="margin-bottom:12px;">
+            <label>ProductId</label><br />
+            <input asp-for="ProductId" type="number" style="width:200px;" />
+        </div>
+
+        <hr />
+
+        <div style="margin-bottom:12px;">
+            <label>
+                <input type="radio" name="Mode" value="remaining" @(Model.Mode == "remaining" ? "checked" : null) />
+                Saldo restante (órdenes con depósito pagado)
+            </label>
+        </div>
+        <div style="margin-bottom:12px;">
+            <label>Orden</label><br />
+            <select asp-for="OrderIdForRemaining" style="min-width:320px;">
+                <option value="">-- Seleccionar --</option>
+                @foreach (var o in Model.OrdersNeedingRemaining)
+                {
+                    <option value="@o.OrderId">
+                        #@o.OrderId — @o.ProductName — resto $@o.RemainingAmount.ToString("0.00")
+                    </option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" style="padding:10px 18px;background:#007bff;color:#fff;border:none;cursor:pointer;">
+            Generar URL + QR
+        </button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.CheckoutUrl))
+    {
+        <div style="border:1px solid #2A8703;padding:16px;background:#f6fff6;">
+            <p><strong>Orden:</strong> @Model.CreatedOrderId</p>
+            <p><strong>Tipo:</strong> @Model.PaymentType</p>
+            <p><strong>Monto (sin tax):</strong> $@Model.Amount?.ToString("0.00")</p>
+            <p><strong>URL de Checkout:</strong></p>
+            <p style="word-break:break-all;">
+                <a href="@Model.CheckoutUrl" target="_blank" rel="noopener">@Model.CheckoutUrl</a>
+            </p>
+            <p>
+                <button type="button" id="btnCopyCheckoutUrl">Copiar URL</button>
+            </p>
+            @if (!string.IsNullOrEmpty(Model.QrDataUrl))
+            {
+                <p><strong>Código QR</strong></p>
+                <img src="@Model.QrDataUrl" alt="QR Checkout" width="220" height="220" />
+            }
+            <p style="font-size:13px;color:#555;margin-top:12px;">
+                Envíe esta URL por WhatsApp o mensaje de texto. El impuesto 11.5% se aplica en Stripe Checkout.
+            </p>
+            <script>
+                document.getElementById("btnCopyCheckoutUrl")?.addEventListener("click", function () {
+                    navigator.clipboard.writeText(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CheckoutUrl)));
+                });
+            </script>
+        </div>
+    }
+    }
+</div>
